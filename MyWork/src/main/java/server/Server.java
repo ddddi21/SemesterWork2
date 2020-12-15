@@ -75,6 +75,8 @@ public class Server extends Application implements ConnectionListener{
             if (connectionArrayList.get(0) == connection) {
                 connection.isCommander = true;
             }
+            //кароче вот тут конешкн становится тру, а потом он в Test и соответсвенно в Draw там походу какой то другой
+        //конекшн потому что он фолс...
 
 
 //        sendToAll("Now connected:" + connection);
