@@ -15,7 +15,7 @@ public class Connection {
     private Socket socket;
     private Thread thread;
     private final List<Room> rooms = new ArrayList<>();
-    public Boolean isCommander;
+    public Boolean isCommander = false;
     private BufferedReader in;
     private BufferedWriter out;
 

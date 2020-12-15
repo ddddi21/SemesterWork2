@@ -75,10 +75,9 @@ public class Server extends Application implements ConnectionListener{
             if (connectionArrayList.get(0) == connection) {
                 connection.isCommander = true;
             }
-            //потому что вот тут он еще походу не успевает добавить в лист и поэтому isCommander null.
-        //но непонятно почему ведь сервер раньше запускается кароче беды беды
 
-        sendToAll("Now connected:" + connection);
+
+//        sendToAll("Now connected:" + connection);
     }
 
     @Override

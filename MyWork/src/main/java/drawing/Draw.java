@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.Test;
+import network.Connection;
 
 public class Draw  {
     ColorPicker colorPicker;
@@ -25,9 +26,10 @@ public class Draw  {
     public javafx.scene.control.TextField txtInput;
     javafx.scene.control.ScrollPane scrollPane;
     public javafx.scene.control.TextField roomField;
-    public TextArea txtAreaDisplay;
+    public static TextArea txtAreaDisplay;
+    public Connection connection;
 
-    public void startDraw(Stage primaryStage, boolean isCommander) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
         Group root = new Group();
         VBox vBox = new VBox();
         scrollPane = new javafx.scene.control.ScrollPane();
@@ -44,7 +46,7 @@ public class Draw  {
         final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         initDraw(graphicsContext);
 
-        if(isCommander) {
+        if(connection.isCommander) {
             canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
                     new EventHandler<MouseEvent>() {
 
@@ -115,7 +117,7 @@ public class Draw  {
             txtInput.setPromptText("New message");
             txtInput.setTooltip(new Tooltip("Write your message. "));
             javafx.scene.control.Button btnSend = new Button("Send");
-//            btnSend.setOnAction(new Test.ButtonListener());
+            btnSend.setOnAction(new ButtonListener());
             hBox.getChildren().addAll(txtName, txtInput, btnSend);
             HBox.setHgrow(txtInput, Priority.ALWAYS);
             vBox.getChildren().addAll(canvas, scrollPane, hBox);
@@ -163,6 +165,26 @@ public class Draw  {
         graphicsContext.moveTo(x,y);
         graphicsContext.setStroke(colorPicker.getValue());
         graphicsContext.stroke();
+    }
+
+    public class ButtonListener implements EventHandler<javafx.event.ActionEvent> {
+        @Override
+        public void handle(javafx.event.ActionEvent e) {
+            String username = txtName.getText().trim();
+            String message = txtInput.getText().trim();
+
+            if (username.length() == 0) {
+                username = "Unknown";
+            }
+            if (message.length() == 0) {
+                return;
+            }
+
+            connection.sendString("[" + username + "]: " + message + "");
+
+            txtInput.clear();
+
+        }
     }
 
 }
