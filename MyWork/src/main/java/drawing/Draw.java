@@ -9,85 +9,119 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import main.Test;
 
 public class Draw  {
     ColorPicker colorPicker;
+    public javafx.scene.control.TextField txtName;
+    public javafx.scene.control.TextField txtInput;
+    javafx.scene.control.ScrollPane scrollPane;
+    public javafx.scene.control.TextField roomField;
+    public TextArea txtAreaDisplay;
 
-    public void startDraw(Stage primaryStage) throws Exception {
+    public void startDraw(Stage primaryStage, boolean isCommander) throws Exception {
+        Group root = new Group();
+        VBox vBox = new VBox();
+        scrollPane = new javafx.scene.control.ScrollPane();
+        HBox hBox = new HBox();
+
+        txtAreaDisplay = new TextArea();
+        txtAreaDisplay.setEditable(false);
+        scrollPane.setContent(txtAreaDisplay);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+
+
         final Canvas canvas = new Canvas(600, 300);
         final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         initDraw(graphicsContext);
 
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
-                new EventHandler<MouseEvent>() {
+        if(isCommander) {
+            canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                    new EventHandler<MouseEvent>() {
 
-                    @Override
-                    public void handle(MouseEvent event) {
-                        graphicsContext.beginPath();
-                        graphicsContext.moveTo(event.getX(), event.getY());
-                        graphicsContext.setStroke(colorPicker.getValue());
-                        graphicsContext.stroke();
-                    }
-                });
+                        @Override
+                        public void handle(MouseEvent event) {
+                            graphicsContext.beginPath();
+                            graphicsContext.moveTo(event.getX(), event.getY());
+                            graphicsContext.setStroke(colorPicker.getValue());
+                            graphicsContext.stroke();
+                        }
+                    });
 
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-                new EventHandler<MouseEvent>() {
+            canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
+                    new EventHandler<MouseEvent>() {
 
-                    @Override
-                    public void handle(MouseEvent event) {
-                        graphicsContext.lineTo(event.getX(), event.getY());
-                        graphicsContext.setStroke(colorPicker.getValue());
-                        graphicsContext.stroke();
-                    }
-                });
+                        @Override
+                        public void handle(MouseEvent event) {
+                            graphicsContext.lineTo(event.getX(), event.getY());
+                            graphicsContext.setStroke(colorPicker.getValue());
+                            graphicsContext.stroke();
+                        }
+                    });
 
-        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
-                new EventHandler<MouseEvent>() {
+            canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
+                    new EventHandler<MouseEvent>() {
 
-                    @Override
-                    public void handle(MouseEvent event) {
+                        @Override
+                        public void handle(MouseEvent event) {
 
-                    }
-                });
+                        }
+                    });
 
-        Group root = new Group();
+            Button clean = new Button();
 
-        Button clean = new Button();
-        clean.setText("clean all");
-        clean.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                double canvasWidth = graphicsContext.getCanvas().getWidth();
-                double canvasHeight = graphicsContext.getCanvas().getHeight();
+            clean.setText("clean all");
+            clean.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    double canvasWidth = graphicsContext.getCanvas().getWidth();
+                    double canvasHeight = graphicsContext.getCanvas().getHeight();
 
-                graphicsContext .clearRect(0,0,canvasWidth,canvasHeight);
-                graphicsContext.setStroke(Color.BLACK);
-                graphicsContext.setLineWidth(5);
-                graphicsContext.fill();
-                graphicsContext.strokeRect(
-                        0,              //x of the upper left corner
-                        0,              //y of the upper left corner
-                        canvasWidth,    //width of the rectangle
-                        canvasHeight);  //height of the rectangle
-                graphicsContext.setStroke(colorPicker.getValue());
-                graphicsContext.setLineWidth(3);
-            }
-        });
-        VBox vBox = new VBox();
-        HBox hBox = new HBox();
-        HBox topBox = new HBox();
+                    graphicsContext .clearRect(0,0,canvasWidth,canvasHeight);
+                    graphicsContext.setStroke(Color.BLACK);
+                    graphicsContext.setLineWidth(5);
+                    graphicsContext.fill();
+                    graphicsContext.strokeRect(
+                            0,              //x of the upper left corner
+                            0,              //y of the upper left corner
+                            canvasWidth,    //width of the rectangle
+                            canvasHeight);  //height of the rectangle
+                    graphicsContext.setStroke(colorPicker.getValue());
+                    graphicsContext.setLineWidth(3);
+                }
+            });
 
-        topBox.getChildren().addAll(colorPicker,clean);
-        HBox.setHgrow(clean,Priority.ALWAYS);
-        HBox.setHgrow(colorPicker,Priority.ALWAYS);
+            HBox topBox = new HBox();
 
-        vBox.getChildren().addAll(topBox,canvas, hBox);
+            topBox.getChildren().addAll(colorPicker,clean);
+            HBox.setHgrow(clean,Priority.ALWAYS);
+            HBox.setHgrow(colorPicker,Priority.ALWAYS);
+            vBox.getChildren().addAll(topBox,canvas, scrollPane);
+
+        } else{
+            txtName = new javafx.scene.control.TextField();
+            txtName.setPromptText("Name");
+            txtName.setTooltip(new Tooltip("Write your name. "));
+            txtInput = new javafx.scene.control.TextField();
+            txtInput.setPromptText("New message");
+            txtInput.setTooltip(new Tooltip("Write your message. "));
+            javafx.scene.control.Button btnSend = new Button("Send");
+//            btnSend.setOnAction(new Test.ButtonListener());
+            hBox.getChildren().addAll(txtName, txtInput, btnSend);
+            HBox.setHgrow(txtInput, Priority.ALWAYS);
+            vBox.getChildren().addAll(canvas, scrollPane, hBox);
+        }
+
+        vBox.setVgrow(scrollPane, Priority.ALWAYS);
         root.getChildren().add(vBox);
         Scene scene = new Scene(root, 800, 625);
         primaryStage.setTitle("крокодильчик");
@@ -130,4 +164,5 @@ public class Draw  {
         graphicsContext.setStroke(colorPicker.getValue());
         graphicsContext.stroke();
     }
+
 }

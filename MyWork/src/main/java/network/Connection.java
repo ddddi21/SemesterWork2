@@ -32,10 +32,10 @@ public class Connection {
             @Override
             public void run() {
                 try {
-                   Connection.this.isCommander = randomCommander(Server.isHasCommander);
-                    if(Connection.this.isCommander){
-                        Server.isHasCommander = true;
-                    }else Server.isHasCommander = false;
+//                   Connection.this.isCommander = randomCommander(Server.isHasCommander);
+//                    if(Connection.this.isCommander){
+//                        Server.isHasCommander = true;
+//                    }else Server.isHasCommander = false;
                     connectionListener.onConnectionReady(Connection.this);
                     while (!thread.isInterrupted()){
                         connectionListener.onReceiveString(Connection.this, in.readLine());

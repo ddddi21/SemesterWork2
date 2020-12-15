@@ -62,6 +62,7 @@ public class Test extends Application implements ConnectionListener {
         final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         initDraw(graphicsContext);
 
+        //вот тут кароче у меня налл поинтер тк коннекшн еще налл потому что (идем в класс Сервер)
         if(connection.isCommander) {
             canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
                     new EventHandler<MouseEvent>() {

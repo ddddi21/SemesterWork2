@@ -27,9 +27,7 @@ public class Server extends Application implements ConnectionListener{
     private final List<Room> rooms = new ArrayList<>();
     public static Boolean isHasCommander = false;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         txtAreaDisplay = new TextArea();
@@ -58,7 +56,10 @@ public class Server extends Application implements ConnectionListener{
         } catch (IOException e){
             throw  new RuntimeException(e);
         }
+    }
 
+    public static void main(String[] args) {
+        launch(args);
     }
 
     @Override
@@ -71,12 +72,12 @@ public class Server extends Application implements ConnectionListener{
 //        }
 //        currentRoom.list.add(connection);
         connectionArrayList.add(connection);
-        while(true){
             if (connectionArrayList.get(0) == connection) {
                 connection.isCommander = true;
-                break;
             }
-        }
+            //потому что вот тут он еще походу не успевает добавить в лист и поэтому isCommander null.
+        //но непонятно почему ведь сервер раньше запускается кароче беды беды
+
         sendToAll("Now connected:" + connection);
     }
 
@@ -93,6 +94,7 @@ public class Server extends Application implements ConnectionListener{
         connectionArrayList.remove(connection);
         sendToAll("Now disconnected =( :" + connection);
     }
+    //TODO(не работает шота)
 
     @Override
     public synchronized void onException(Connection connection, Exception e) {
