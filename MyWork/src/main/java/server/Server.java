@@ -1,6 +1,6 @@
 package server;
 
-import client.Client2;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -20,16 +20,16 @@ import java.util.List;
 
 public class Server extends Application implements ConnectionListener{
     public TextArea txtAreaDisplay;
-    private final ArrayList<Connection> connectionArrayList = new ArrayList<>();
+    public static final ArrayList<Connection> connectionArrayList = new ArrayList<>();
 //    private Client2 client = new Client2();
     private Test client = new Test();
     private Room currentRoom;
     private final List<Room> rooms = new ArrayList<>();
+    public static Boolean isHasCommander = false;
 
     public static void main(String[] args) {
         launch(args);
     }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         txtAreaDisplay = new TextArea();
@@ -71,6 +71,12 @@ public class Server extends Application implements ConnectionListener{
 //        }
 //        currentRoom.list.add(connection);
         connectionArrayList.add(connection);
+        while(true){
+            if (connectionArrayList.get(0) == connection) {
+                connection.isCommander = true;
+                break;
+            }
+        }
         sendToAll("Now connected:" + connection);
     }
 

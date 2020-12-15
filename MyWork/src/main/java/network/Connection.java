@@ -2,6 +2,7 @@ package network;
 
 
 import room.Room;
+import server.Server;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,6 +15,7 @@ public class Connection {
     private Socket socket;
     private Thread thread;
     private final List<Room> rooms = new ArrayList<>();
+    public Boolean isCommander;
     private BufferedReader in;
     private BufferedWriter out;
 
@@ -30,6 +32,10 @@ public class Connection {
             @Override
             public void run() {
                 try {
+                   Connection.this.isCommander = randomCommander(Server.isHasCommander);
+                    if(Connection.this.isCommander){
+                        Server.isHasCommander = true;
+                    }else Server.isHasCommander = false;
                     connectionListener.onConnectionReady(Connection.this);
                     while (!thread.isInterrupted()){
                         connectionListener.onReceiveString(Connection.this, in.readLine());
@@ -85,5 +91,14 @@ public class Connection {
     @Override
     public String toString(){
         return "Connection" + socket.getInetAddress() + ": " + socket.getPort();
+    }
+
+    public static boolean randomCommander(boolean ishas){
+        if(!ishas) {
+            int random = (int) (Math.random() * 10);
+            int x = 3;
+            return random == x;
+        }return false;
+
     }
 }

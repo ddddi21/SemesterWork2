@@ -23,6 +23,7 @@ import network.ConnectionListener;
 import room.Room;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class Test extends Application implements ConnectionListener {
@@ -33,98 +34,22 @@ public class Test extends Application implements ConnectionListener {
     public javafx.scene.control.TextField roomField;
     public TextArea txtAreaDisplay;
     private Connection connection;
+    private final ArrayList<Connection> connectionArrayList = new ArrayList<>();
+
 
 
     @Override
     public void start(Stage primaryStage) {
-
-        final Canvas canvas = new Canvas(600, 300);
-        final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        initDraw(graphicsContext);
-
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
-                new EventHandler<MouseEvent>() {
-
-                    @Override
-                    public void handle(MouseEvent event) {
-                        graphicsContext.beginPath();
-                        graphicsContext.moveTo(event.getX(), event.getY());
-                        graphicsContext.setStroke(colorPicker.getValue());
-                        graphicsContext.stroke();
-                    }
-                });
-
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-                new EventHandler<MouseEvent>() {
-
-                    @Override
-                    public void handle(MouseEvent event) {
-                        graphicsContext.lineTo(event.getX(), event.getY());
-                        graphicsContext.setStroke(colorPicker.getValue());
-                        graphicsContext.stroke();
-                    }
-                });
-
-        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
-                new EventHandler<MouseEvent>() {
-
-                    @Override
-                    public void handle(MouseEvent event) {
-
-                    }
-                });
-
+        try {
+            connection = new Connection(this, "localhost", 8181);
+//            txtAreaDisplay.appendText("Connected. \n");
+        } catch (IOException e) {
+            printMessage("Connection exception: " + e);
+        }
         Group root = new Group();
-
-        Button clean = new Button();
-        Button eraser = new Button();
-
-        clean.setText("clean all");
-        clean.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                double canvasWidth = graphicsContext.getCanvas().getWidth();
-                double canvasHeight = graphicsContext.getCanvas().getHeight();
-
-                graphicsContext .clearRect(0,0,canvasWidth,canvasHeight);
-                graphicsContext.setStroke(Color.BLACK);
-                graphicsContext.setLineWidth(5);
-                graphicsContext.fill();
-                graphicsContext.strokeRect(
-                        0,              //x of the upper left corner
-                        0,              //y of the upper left corner
-                        canvasWidth,    //width of the rectangle
-                        canvasHeight);  //height of the rectangle
-                graphicsContext.setStroke(colorPicker.getValue());
-                graphicsContext.setLineWidth(3);
-            }
-        });
-
-//        eraser.setText("eraser");
-//        eraser.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                double canvasWidth = graphicsContext.getCanvas().getWidth();
-//                double canvasHeight = graphicsContext.getCanvas().getHeight();
-//
-//                graphicsContext.setStroke(Color.BLACK);
-//                graphicsContext.setLineWidth(5);
-//                graphicsContext.fill();
-//                graphicsContext.strokeRect(
-//                        0,              //x of the upper left corner
-//                        0,              //y of the upper left corner
-//                        canvasWidth,    //width of the rectangle
-//                        canvasHeight);  //height of the rectangle
-//
-//
-//            }
-//        });
-
         VBox vBox = new VBox();
         scrollPane = new javafx.scene.control.ScrollPane();
         HBox hBox = new HBox();
-        HBox topBox = new HBox();
-
 
         txtAreaDisplay = new TextArea();
         txtAreaDisplay.setEditable(false);
@@ -132,35 +57,96 @@ public class Test extends Application implements ConnectionListener {
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
 
-        txtName = new javafx.scene.control.TextField();
-        txtName.setPromptText("Name");
-        txtName.setTooltip(new Tooltip("Write your name. "));
-        txtInput = new javafx.scene.control.TextField();
-        txtInput.setPromptText("New message");
-        txtInput.setTooltip(new Tooltip("Write your message. "));
-        javafx.scene.control.Button btnSend = new Button("Send");
-        btnSend.setOnAction(new ButtonListener());
 
-        hBox.getChildren().addAll(txtName, txtInput, btnSend);
-        topBox.getChildren().addAll(colorPicker,clean);
-        HBox.setHgrow(txtInput, Priority.ALWAYS);
-        HBox.setHgrow(clean,Priority.ALWAYS);
-        HBox.setHgrow(colorPicker,Priority.ALWAYS);
+        final Canvas canvas = new Canvas(600, 300);
+        final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        initDraw(graphicsContext);
+
+        if(connection.isCommander) {
+            canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                    new EventHandler<MouseEvent>() {
+
+                        @Override
+                        public void handle(MouseEvent event) {
+                            graphicsContext.beginPath();
+                            graphicsContext.moveTo(event.getX(), event.getY());
+                            graphicsContext.setStroke(colorPicker.getValue());
+                            graphicsContext.stroke();
+                        }
+                    });
+
+            canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
+                    new EventHandler<MouseEvent>() {
+
+                        @Override
+                        public void handle(MouseEvent event) {
+                            graphicsContext.lineTo(event.getX(), event.getY());
+                            graphicsContext.setStroke(colorPicker.getValue());
+                            graphicsContext.stroke();
+                        }
+                    });
+
+            canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
+                    new EventHandler<MouseEvent>() {
+
+                        @Override
+                        public void handle(MouseEvent event) {
+
+                        }
+                    });
+
+            Button clean = new Button();
+
+            clean.setText("clean all");
+            clean.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    double canvasWidth = graphicsContext.getCanvas().getWidth();
+                    double canvasHeight = graphicsContext.getCanvas().getHeight();
+
+                    graphicsContext .clearRect(0,0,canvasWidth,canvasHeight);
+                    graphicsContext.setStroke(Color.BLACK);
+                    graphicsContext.setLineWidth(5);
+                    graphicsContext.fill();
+                    graphicsContext.strokeRect(
+                            0,              //x of the upper left corner
+                            0,              //y of the upper left corner
+                            canvasWidth,    //width of the rectangle
+                            canvasHeight);  //height of the rectangle
+                    graphicsContext.setStroke(colorPicker.getValue());
+                    graphicsContext.setLineWidth(3);
+                }
+            });
+
+            HBox topBox = new HBox();
+
+            topBox.getChildren().addAll(colorPicker,clean);
+            HBox.setHgrow(clean,Priority.ALWAYS);
+            HBox.setHgrow(colorPicker,Priority.ALWAYS);
+            vBox.getChildren().addAll(topBox,canvas, scrollPane);
+
+        } else{
+            txtName = new javafx.scene.control.TextField();
+            txtName.setPromptText("Name");
+            txtName.setTooltip(new Tooltip("Write your name. "));
+            txtInput = new javafx.scene.control.TextField();
+            txtInput.setPromptText("New message");
+            txtInput.setTooltip(new Tooltip("Write your message. "));
+            javafx.scene.control.Button btnSend = new Button("Send");
+            btnSend.setOnAction(new ButtonListener());
+            hBox.getChildren().addAll(txtName, txtInput, btnSend);
+            HBox.setHgrow(txtInput, Priority.ALWAYS);
+            vBox.getChildren().addAll(canvas, scrollPane, hBox);
+        }
+
         vBox.setVgrow(scrollPane, Priority.ALWAYS);
-
-        vBox.getChildren().addAll(topBox,canvas, scrollPane, hBox);
         root.getChildren().add(vBox);
         Scene scene = new Scene(root, 800, 625);
         primaryStage.setTitle("крокодильчик");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        try {
-            connection = new Connection(this, "localhost", 8181);
-            txtAreaDisplay.appendText("Connected. \n");
-        } catch (IOException e) {
-            printMessage("Connection exception: " + e);
-        }
+        txtAreaDisplay.appendText("Connected. \n");
     }
 
     public static void main(String[] args) {
@@ -197,6 +183,13 @@ public class Test extends Application implements ConnectionListener {
 //    }
 @Override
 public void onConnectionReady(Connection connection) {
+//    connectionArrayList.add(connection);
+//    while(true){
+//        if (connectionArrayList.get(0) == connection) {
+//           connection.isCommander = true;
+//            break;
+//        }
+//    }
     printMessage("Connection ready..");
 }
 
