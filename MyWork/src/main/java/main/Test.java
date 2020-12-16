@@ -229,7 +229,8 @@ public void onConnectionReady(Connection connection) {
 
     @Override
     public void onReceiveString(Connection connection, String value) {
-        printMessage(value);
+        if (value.equals("StartFirst")) connection.isCommander = true;
+        else printMessage(value);
     }
 
     @Override

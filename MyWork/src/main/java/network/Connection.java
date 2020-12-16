@@ -17,7 +17,7 @@ public class Connection {
     private final List<Room> rooms = new ArrayList<>();
     public Boolean isCommander = false;
     private BufferedReader in;
-    private BufferedWriter out;
+    public BufferedWriter out;
 
     public Connection(ConnectionListener connectionListener, String ip, Integer port) throws IOException{
         this(connectionListener, new Socket(ip,port));

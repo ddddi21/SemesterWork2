@@ -73,10 +73,13 @@ public class Server extends Application implements ConnectionListener{
 //        currentRoom.list.add(connection);
         connectionArrayList.add(connection);
             if (connectionArrayList.get(0) == connection) {
-                connection.isCommander = true;
+                try{
+                    connection.out.write("StartFirst\n");
+                    connection.out.flush();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
             }
-            //кароче вот тут конешкн становится тру, а потом он в Test и соответсвенно в Draw там походу какой то другой
-        //конекшн потому что он фолс...
 
 
 //        sendToAll("Now connected:" + connection);
