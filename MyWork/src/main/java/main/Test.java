@@ -20,6 +20,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import network.Connection;
 import network.ConnectionListener;
 import room.Room;
@@ -70,6 +71,7 @@ public class Test extends Application implements ConnectionListener {
                 try {
                     Stage stage = new Stage();
                     draw.start(stage);
+                    printMessage("you are drawing!");
                     ((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -79,6 +81,14 @@ public class Test extends Application implements ConnectionListener {
         primaryStage.setTitle("крокодильчик");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                onDisconnect(connection);
+                connection.disconnect();
+            }
+        });
 
 //        Group root = new Group();
 //        VBox vBox = new VBox();
@@ -229,19 +239,23 @@ public void onConnectionReady(Connection connection) {
 
     @Override
     public void onReceiveString(Connection connection, String value) {
-        if (value.equals("StartFirst")) connection.isCommander = true;
-        else printMessage(value);
+        if(!value.equals("null")) {
+            if (value.equals("StartFirst")) {
+                connection.isCommander = true;
+            }
+            else printMessage(value);
+        }
     }
 
     @Override
     public void onDisconnect(Connection connection) {
-        printMessage("Connection close: " + connection);
+//        printMessage("Connection close: " + connection);
 
     }
 
     @Override
     public void onException(Connection connection, Exception e) {
-        printMessage("Connection exception: " + e);
+//        printMessage("Connection exception: " + e);
     }
 
     private synchronized void printMessage(String message){

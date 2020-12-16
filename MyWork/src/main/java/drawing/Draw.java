@@ -17,6 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import main.Test;
 import network.Connection;
 
@@ -129,6 +130,13 @@ public class Draw  {
         primaryStage.setTitle("крокодильчик");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                connection.disconnect();
+            }
+        });
     }
 
 

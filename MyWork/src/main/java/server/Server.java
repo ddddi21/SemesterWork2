@@ -3,10 +3,12 @@ package server;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import main.Test;
 import network.Connection;
 import network.ConnectionListener;
@@ -87,10 +89,12 @@ public class Server extends Application implements ConnectionListener{
 
     @Override
     public synchronized void onReceiveString(Connection connection, String value) {
-        sendToAll(value);
-        Platform.runLater(() -> {
-            txtAreaDisplay.appendText(value + "\n");
-        });
+        if(!value.equals("null")) {
+            sendToAll(value);
+            Platform.runLater(() -> {
+                txtAreaDisplay.appendText(value + "\n");
+            });
+        }
     }
 
     @Override
