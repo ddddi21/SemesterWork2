@@ -99,6 +99,7 @@ public class Server extends Application implements ConnectionListener{
                 Platform.runLater(() -> {
                     txtAreaDisplay.appendText("Игра окончена!" + "\n");
                 });
+                sendToAll("Игра окончена!" + "\n");
             } else {
                 sendToAll(value);
                 Platform.runLater(() -> {

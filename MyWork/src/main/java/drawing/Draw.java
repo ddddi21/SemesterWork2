@@ -35,6 +35,7 @@ public class Draw  {
     String[] drawsAtributes = new String[3];
     public Boolean isStart = false;
     public Integer id;
+    public Boolean wantToEscape = false;
 
     public void start(Stage primaryStage) throws Exception {
         Group root = new Group();
@@ -49,6 +50,16 @@ public class Draw  {
         scrollPane.setContent(txtAreaDisplay);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
+
+        //когда нибудь я это сделаю
+//        Button exit = new Button("выйти");
+//        //если успею сделаю выход на начальное окно
+//        exit.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                wantToEscape = true;
+//            }
+//        });
 
 
         final Canvas canvas = new Canvas(600, 300);

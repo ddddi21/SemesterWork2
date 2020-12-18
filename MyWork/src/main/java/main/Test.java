@@ -106,6 +106,7 @@ public void onConnectionReady(Connection connection) {
                     //проверяю на угаданное слово
                     if(value.equals("win")){
                         printMessage("Вы победили!");
+                        theEnd();
                     }
                     else printMessage(value);
                 }
@@ -134,6 +135,11 @@ public void onConnectionReady(Connection connection) {
         Platform.runLater(() -> {
             Draw.txtAreaDisplay.appendText(message + "\n");
         });
+    }
+
+    //возможно в будущем добавлю вывод имени угадавшего
+    private void theEnd(){
+
     }
 
 }
