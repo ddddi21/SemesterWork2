@@ -8,26 +8,17 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import network.Connection;
 import network.ConnectionListener;
-import room.Room;
+import services.SendDrawingService;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 
 public class Test extends Application implements ConnectionListener {
@@ -38,7 +29,8 @@ public class Test extends Application implements ConnectionListener {
     public javafx.scene.control.TextField roomField;
     public TextArea txtAreaDisplay;
     private Connection connection;
-    Draw draw;
+    Draw draw = new Draw();
+    SendDrawingService drawingService = new SendDrawingService();
     private final ArrayList<Connection> connectionArrayList = new ArrayList<>();
 
 
@@ -51,8 +43,8 @@ public class Test extends Application implements ConnectionListener {
         } catch (IOException e) {
 //            printMessage("Connection exception: " + e);
         }
-        draw = new Draw();
         draw.connection = this.connection;
+        draw.id = connection.id;
 
         //отрисовываем первое окошко входа в игру
         Group start = new Group();
@@ -247,6 +239,10 @@ public void onConnectionReady(Connection connection) {
             if (value.equals("StartFirst")) {
                 connection.isCommander = true;
             }
+            //принимаю что началась рисовка
+            if(value.equals("GameIsStarting")){
+                onStartDrawing(connection, true);
+            }
             else printMessage(value);
         }
     }
@@ -260,6 +256,12 @@ public void onConnectionReady(Connection connection) {
     @Override
     public void onException(Connection connection, Exception e) {
 //        printMessage("Connection exception: " + e);
+    }
+
+    //присваиваю тру в классе где я потом этот тру должна видеть чтобы начать отрисоввыать но все пошло по одному месту
+    @Override
+    public void onStartDrawing(Connection connection, boolean isStart) {
+        draw.isStart = true;
     }
 
     private synchronized void printMessage(String message){

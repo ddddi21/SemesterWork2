@@ -5,6 +5,7 @@ import drawing.Draw;
 import javafx.scene.canvas.GraphicsContext;
 import room.Room;
 import server.Server;
+import services.SendDrawingService;
 
 import java.io.*;
 import java.net.Socket;
@@ -20,6 +21,8 @@ public class Connection {
     public Boolean isCommander = false;
     private BufferedReader in;
     public BufferedWriter out;
+    public Integer id;
+    SendDrawingService drawingService = new SendDrawingService();
 
     public Connection(ConnectionListener connectionListener, String ip, Integer port) throws IOException{
         this(connectionListener, new Socket(ip,port));
@@ -41,6 +44,8 @@ public class Connection {
                     connectionListener.onConnectionReady(Connection.this);
                     while (!thread.isInterrupted()){
                         connectionListener.onReceiveString(Connection.this, in.readLine());
+                        connectionListener.onStartDrawing(Connection.this, drawingService.sendIsStartGame());
+                        //хотела поставить слушателя на начало рисовки
                     }
                 } catch (IOException e) {
                     connectionListener.onException(Connection.this,e);

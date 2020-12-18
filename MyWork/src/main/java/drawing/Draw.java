@@ -33,7 +33,8 @@ public class Draw  {
     SendDrawingService drawingService = new SendDrawingService();
     StringBuilder getDrawing = new StringBuilder();
     String[] drawsAtributes = new String[3];
-    Boolean isStart = false;
+    public Boolean isStart = false;
+    public Integer id;
 
     public void start(Stage primaryStage) throws Exception {
         Group root = new Group();
@@ -66,6 +67,8 @@ public class Draw  {
                             graphicsContext.setStroke(colorPicker.getValue());
                             graphicsContext.stroke();
                             isStart = true;
+                            drawingService.isStartGame(isStart);
+                            //если он начал рисовать передаю тру
                         }
                     });
 
@@ -136,20 +139,10 @@ public class Draw  {
             HBox.setHgrow(txtInput, Priority.ALWAYS);
             vBox.getChildren().addAll(canvas, scrollPane, hBox);
 
-            if(isStart) {
-                while (true) {
-                    getDrawing = drawingService.sendPictureToPlayers();
-                    drawsAtributes = getDrawing.toString().split("#");
-                    double x = Double.parseDouble(drawsAtributes[0]);
-                    double y = Double.parseDouble(drawsAtributes[1]);
-                    ColorPicker colorPicker = new ColorPicker();
-                    colorPicker.setValue(stringToColor(drawsAtributes[2]));
-                    graphicsContext.beginPath();
-                    graphicsContext.moveTo(x, y);
-                    graphicsContext.setStroke(colorPicker.getValue());
-                    graphicsContext.stroke();
-                }
-            }
+            //если начал рисовать вывзыается метод для отрисовки
+            if(drawingService.sendIsStartGame())
+            draw(graphicsContext);
+
         }
 
         vBox.setVgrow(scrollPane, Priority.ALWAYS);
@@ -232,6 +225,23 @@ public class Draw  {
         } catch (Exception e) {
             color = null; // Not defined
         } return color;
+    }
+
+    public void draw(GraphicsContext graphicsContext){
+        if(isStart) {
+            while (true) {
+                getDrawing = drawingService.sendPictureToPlayers();
+                drawsAtributes = getDrawing.toString().split("#");
+                double x = Double.parseDouble(drawsAtributes[0]);
+                double y = Double.parseDouble(drawsAtributes[1]);
+                ColorPicker colorPicker = new ColorPicker();
+                colorPicker.setValue(stringToColor(drawsAtributes[2]));
+                graphicsContext.beginPath();
+                graphicsContext.moveTo(x, y);
+                graphicsContext.setStroke(colorPicker.getValue());
+                graphicsContext.stroke();
+            }
+        }
     }
 
 }

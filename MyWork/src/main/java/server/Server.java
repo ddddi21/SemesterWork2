@@ -78,6 +78,7 @@ public class Server extends Application implements ConnectionListener{
 //        }
 //        currentRoom.list.add(connection);
         connectionArrayList.add(connection);
+        connection.id = connectionArrayList.indexOf(connection);
         drawingService.getAllPlayers(connection);
         //первый подключенный игрок становится ведущим
         if (connectionArrayList.get(0) == connection) {
@@ -115,6 +116,19 @@ public class Server extends Application implements ConnectionListener{
     @Override
     public synchronized void onException(Connection connection, Exception e) {
         System.out.println("Connection exception: " + e);
+    }
+
+    //передаю в коннекшн что начал рисвать
+    @Override
+    public void onStartDrawing(Connection connection, boolean isStart) {
+        if(isStart){
+            try {
+                connection.out.write("GameIsStarting");
+                connection.out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void sendToAll(String string){

@@ -13,6 +13,7 @@ public class SendDrawingService {
     ArrayList <Connection> allPlayers = new ArrayList<>();
     StringBuilder gettingFromCommander;
     StringBuilder sendingToPlayers = new StringBuilder();
+    Boolean isStart= false;
 
 
     //получаем игроков, которые угадывают
@@ -42,6 +43,20 @@ public class SendDrawingService {
     public void processingPicture(StringBuilder stringBuilder){
         sendingToPlayers = stringBuilder;
     }
+
+//    public void fjkdjn(Integer drawId,ArrayList<Connection> playersArrayList ){
+//        for (int i = 0; i < playersArrayList.size()-1; i++) {
+//            drawId
+//        }
+//    }
+    public void isStartGame(Boolean start){
+        this.isStart = start;
+    }
+
+    public boolean sendIsStartGame(){
+        return isStart;
+    }
+    //отправлю кому надо что начал рисовать
 
 
 
