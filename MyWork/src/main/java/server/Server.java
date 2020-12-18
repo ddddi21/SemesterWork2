@@ -16,6 +16,7 @@ import network.Connection;
 import network.ConnectionListener;
 import room.Room;
 import services.SendDrawingService;
+import services.WordService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -32,6 +33,8 @@ public class Server extends Application implements ConnectionListener{
     private final List<Room> rooms = new ArrayList<>();
     public static Boolean isHasCommander = false;
     SendDrawingService drawingService = new SendDrawingService();
+    WordService wordService = new WordService();
+    Boolean isWin = false;
 
 
     @Override
@@ -85,10 +88,23 @@ public class Server extends Application implements ConnectionListener{
     @Override
     public synchronized void onReceiveString(Connection connection, String value) {
         if(!value.equals("null")) {
-            sendToAll(value);
-            Platform.runLater(() -> {
-                txtAreaDisplay.appendText(value + "\n");
-            });
+            isWin = wordService.isRightWord(value);
+            if(isWin){
+                try {
+                    connection.out.write("win\n");
+                    connection.out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(() -> {
+                    txtAreaDisplay.appendText("Игра окончена!" + "\n");
+                });
+            } else {
+                sendToAll(value);
+                Platform.runLater(() -> {
+                    txtAreaDisplay.appendText(value + "\n");
+                });
+            }
         }
     }
 

@@ -102,7 +102,13 @@ public void onConnectionReady(Connection connection) {
                 //принимаю что началась рисовка
                 if (value.equals("GameIsStarting")) {
                     onStartDrawing(connection, true);
-                } else printMessage(value);
+                } else{
+                    //проверяю на угаданное слово
+                    if(value.equals("win")){
+                        printMessage("Вы победили!");
+                    }
+                    else printMessage(value);
+                }
             }
         }
     }
