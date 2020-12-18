@@ -1,10 +1,12 @@
 package server;
 
 
+import drawing.Draw;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -13,6 +15,7 @@ import main.Test;
 import network.Connection;
 import network.ConnectionListener;
 import room.Room;
+import services.SendDrawingService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -28,6 +31,7 @@ public class Server extends Application implements ConnectionListener{
     private Room currentRoom;
     private final List<Room> rooms = new ArrayList<>();
     public static Boolean isHasCommander = false;
+    SendDrawingService drawingService = new SendDrawingService();
 
 
     @Override
@@ -74,14 +78,19 @@ public class Server extends Application implements ConnectionListener{
 //        }
 //        currentRoom.list.add(connection);
         connectionArrayList.add(connection);
-            if (connectionArrayList.get(0) == connection) {
+        drawingService.getAllPlayers(connection);
+        //первый подключенный игрок становится ведущим
+        if (connectionArrayList.get(0) == connection) {
+            drawingService.getCommander(connection);
                 try{
                     connection.out.write("StartFirst\n");
                     connection.out.flush();
                 } catch (IOException e){
                     e.printStackTrace();
                 }
-            }
+            } else {
+            drawingService.getPlayers(connection);
+        }
 
 
 //        sendToAll("Now connected:" + connection);
@@ -102,7 +111,6 @@ public class Server extends Application implements ConnectionListener{
         connectionArrayList.remove(connection);
         sendToAll("Now disconnected =( :" + connection);
     }
-    //TODO(не работает шота)
 
     @Override
     public synchronized void onException(Connection connection, Exception e) {

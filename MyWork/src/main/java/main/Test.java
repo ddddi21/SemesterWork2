@@ -53,6 +53,8 @@ public class Test extends Application implements ConnectionListener {
         }
         draw = new Draw();
         draw.connection = this.connection;
+
+        //отрисовываем первое окошко входа в игру
         Group start = new Group();
         Button startGame = new Button("start game");
 //        scrollPane = new javafx.scene.control.ScrollPane();
@@ -64,6 +66,7 @@ public class Test extends Application implements ConnectionListener {
 
         start.getChildren().addAll(startGame);
 
+        //новое окошко при нажатии "начать игру"
         Scene scene = new Scene(start, 800, 625);
         startGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -71,6 +74,7 @@ public class Test extends Application implements ConnectionListener {
                 try {
                     Stage stage = new Stage();
                     draw.start(stage);
+                    if(connection.isCommander)
                     printMessage("you are drawing!");
                     ((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (Exception e) {

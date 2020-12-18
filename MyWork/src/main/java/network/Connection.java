@@ -1,6 +1,8 @@
 package network;
 
 
+import drawing.Draw;
+import javafx.scene.canvas.GraphicsContext;
 import room.Room;
 import server.Server;
 
@@ -100,5 +102,12 @@ public class Connection {
             return random == x;
         }return false;
 
+    }
+
+    public synchronized void getPicture(double x, double y, GraphicsContext graphicsContext,  Draw draw) {
+        graphicsContext.beginPath();
+        graphicsContext.moveTo(x,y);
+        graphicsContext.setStroke(draw.colorPicker.getValue());
+        graphicsContext.stroke();
     }
 }

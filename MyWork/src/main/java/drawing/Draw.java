@@ -1,6 +1,5 @@
 package drawing;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -18,23 +17,31 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import main.Test;
 import network.Connection;
+import services.SendDrawingService;
+
+import java.lang.reflect.Field;
 
 public class Draw  {
-    ColorPicker colorPicker;
+    public ColorPicker colorPicker;
     public javafx.scene.control.TextField txtName;
     public javafx.scene.control.TextField txtInput;
     javafx.scene.control.ScrollPane scrollPane;
     public javafx.scene.control.TextField roomField;
     public static TextArea txtAreaDisplay;
     public Connection connection;
+    SendDrawingService drawingService = new SendDrawingService();
+    StringBuilder getDrawing = new StringBuilder();
+    String[] drawsAtributes = new String[3];
+    Boolean isStart = false;
 
     public void start(Stage primaryStage) throws Exception {
         Group root = new Group();
         VBox vBox = new VBox();
         scrollPane = new javafx.scene.control.ScrollPane();
         HBox hBox = new HBox();
+
+        getDrawing = new StringBuilder();
 
         txtAreaDisplay = new TextArea();
         txtAreaDisplay.setEditable(false);
@@ -47,6 +54,7 @@ public class Draw  {
         final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         initDraw(graphicsContext);
 
+        //если игрок ведущий, то отрисовываем соответсующий юай и добавляем соотв функционал
         if(connection.isCommander) {
             canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
                     new EventHandler<MouseEvent>() {
@@ -57,6 +65,7 @@ public class Draw  {
                             graphicsContext.moveTo(event.getX(), event.getY());
                             graphicsContext.setStroke(colorPicker.getValue());
                             graphicsContext.stroke();
+                            isStart = true;
                         }
                     });
 
@@ -65,9 +74,13 @@ public class Draw  {
 
                         @Override
                         public void handle(MouseEvent event) {
-                            graphicsContext.lineTo(event.getX(), event.getY());
+                            double x = event.getX();
+                            double y= event.getY();
+                            graphicsContext.lineTo(x,y);
                             graphicsContext.setStroke(colorPicker.getValue());
                             graphicsContext.stroke();
+                            Color color = colorPicker.getValue();
+                            drawingService.receivePictureFromCommander(x,y,colorPicker.getValue());
                         }
                     });
 
@@ -122,6 +135,21 @@ public class Draw  {
             hBox.getChildren().addAll(txtName, txtInput, btnSend);
             HBox.setHgrow(txtInput, Priority.ALWAYS);
             vBox.getChildren().addAll(canvas, scrollPane, hBox);
+
+            if(isStart) {
+                while (true) {
+                    getDrawing = drawingService.sendPictureToPlayers();
+                    drawsAtributes = getDrawing.toString().split("#");
+                    double x = Double.parseDouble(drawsAtributes[0]);
+                    double y = Double.parseDouble(drawsAtributes[1]);
+                    ColorPicker colorPicker = new ColorPicker();
+                    colorPicker.setValue(stringToColor(drawsAtributes[2]));
+                    graphicsContext.beginPath();
+                    graphicsContext.moveTo(x, y);
+                    graphicsContext.setStroke(colorPicker.getValue());
+                    graphicsContext.stroke();
+                }
+            }
         }
 
         vBox.setVgrow(scrollPane, Priority.ALWAYS);
@@ -168,13 +196,14 @@ public class Draw  {
 //        g.fillOval(x, y, w, h);
 //    }
 
-    public void getPicture(double x, double y, GraphicsContext graphicsContext) {
+    public synchronized void getPicture(double x, double y, GraphicsContext graphicsContext) {
         graphicsContext.beginPath();
         graphicsContext.moveTo(x,y);
         graphicsContext.setStroke(colorPicker.getValue());
         graphicsContext.stroke();
     }
 
+    //слушатель на отправку сообщений в чат, который впоследствии отправляет другим клиентам сообщение
     public class ButtonListener implements EventHandler<javafx.event.ActionEvent> {
         @Override
         public void handle(javafx.event.ActionEvent e) {
@@ -193,6 +222,16 @@ public class Draw  {
             txtInput.clear();
 
         }
+    }
+
+    public Color stringToColor(String string){
+        Color color;
+        try {
+            Field field = Class.forName("java.awt.Color").getField(string);
+            color = (Color)field.get(null);
+        } catch (Exception e) {
+            color = null; // Not defined
+        } return color;
     }
 
 }
