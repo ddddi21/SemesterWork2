@@ -22,12 +22,6 @@ import java.util.ArrayList;
 
 
 public class Test extends Application implements ConnectionListener {
-    ColorPicker colorPicker;
-    public javafx.scene.control.TextField txtName;
-    public javafx.scene.control.TextField txtInput;
-    javafx.scene.control.ScrollPane scrollPane;
-    public javafx.scene.control.TextField roomField;
-    public TextArea txtAreaDisplay;
     private Connection connection;
     Draw draw = new Draw();
     SendDrawingService drawingService = new SendDrawingService();
@@ -49,12 +43,7 @@ public class Test extends Application implements ConnectionListener {
         //отрисовываем первое окошко входа в игру
         Group start = new Group();
         Button startGame = new Button("start game");
-//        scrollPane = new javafx.scene.control.ScrollPane();
-//        txtAreaDisplay = new TextArea();
-//        txtAreaDisplay.setEditable(false);
-//        scrollPane.setContent(txtAreaDisplay);
-//        scrollPane.setFitToHeight(true);
-//        scrollPane.setFitToWidth(true);
+
 
         start.getChildren().addAll(startGame);
 
@@ -85,108 +74,6 @@ public class Test extends Application implements ConnectionListener {
                 connection.disconnect();
             }
         });
-
-//        Group root = new Group();
-//        VBox vBox = new VBox();
-//        scrollPane = new javafx.scene.control.ScrollPane();
-//        HBox hBox = new HBox();
-//
-//        txtAreaDisplay = new TextArea();
-//        txtAreaDisplay.setEditable(false);
-//        scrollPane.setContent(txtAreaDisplay);
-//        scrollPane.setFitToHeight(true);
-//        scrollPane.setFitToWidth(true);
-//
-//
-//        final Canvas canvas = new Canvas(600, 300);
-//        final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-//        initDraw(graphicsContext);
-//
-//        if(connection.isCommander) {
-//            canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
-//                    new EventHandler<MouseEvent>() {
-//
-//                        @Override
-//                        public void handle(MouseEvent event) {
-//                            graphicsContext.beginPath();
-//                            graphicsContext.moveTo(event.getX(), event.getY());
-//                            graphicsContext.setStroke(colorPicker.getValue());
-//                            graphicsContext.stroke();
-//                        }
-//                    });
-//
-//            canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-//                    new EventHandler<MouseEvent>() {
-//
-//                        @Override
-//                        public void handle(MouseEvent event) {
-//                            graphicsContext.lineTo(event.getX(), event.getY());
-//                            graphicsContext.setStroke(colorPicker.getValue());
-//                            graphicsContext.stroke();
-//                        }
-//                    });
-//
-//            canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
-//                    new EventHandler<MouseEvent>() {
-//
-//                        @Override
-//                        public void handle(MouseEvent event) {
-//
-//                        }
-//                    });
-//
-//            Button clean = new Button();
-//
-//            clean.setText("clean all");
-//            clean.setOnAction(new EventHandler<ActionEvent>() {
-//                @Override
-//                public void handle(ActionEvent event) {
-//                    double canvasWidth = graphicsContext.getCanvas().getWidth();
-//                    double canvasHeight = graphicsContext.getCanvas().getHeight();
-//
-//                    graphicsContext .clearRect(0,0,canvasWidth,canvasHeight);
-//                    graphicsContext.setStroke(Color.BLACK);
-//                    graphicsContext.setLineWidth(5);
-//                    graphicsContext.fill();
-//                    graphicsContext.strokeRect(
-//                            0,              //x of the upper left corner
-//                            0,              //y of the upper left corner
-//                            canvasWidth,    //width of the rectangle
-//                            canvasHeight);  //height of the rectangle
-//                    graphicsContext.setStroke(colorPicker.getValue());
-//                    graphicsContext.setLineWidth(3);
-//                }
-//            });
-//
-//            HBox topBox = new HBox();
-//
-//            topBox.getChildren().addAll(colorPicker,clean);
-//            HBox.setHgrow(clean,Priority.ALWAYS);
-//            HBox.setHgrow(colorPicker,Priority.ALWAYS);
-//            vBox.getChildren().addAll(topBox,canvas, scrollPane);
-//
-//        } else{
-//            txtName = new javafx.scene.control.TextField();
-//            txtName.setPromptText("Name");
-//            txtName.setTooltip(new Tooltip("Write your name. "));
-//            txtInput = new javafx.scene.control.TextField();
-//            txtInput.setPromptText("New message");
-//            txtInput.setTooltip(new Tooltip("Write your message. "));
-//            javafx.scene.control.Button btnSend = new Button("Send");
-//            btnSend.setOnAction(new ButtonListener());
-//            hBox.getChildren().addAll(txtName, txtInput, btnSend);
-//            HBox.setHgrow(txtInput, Priority.ALWAYS);
-//            vBox.getChildren().addAll(canvas, scrollPane, hBox);
-//        }
-//
-//        vBox.setVgrow(scrollPane, Priority.ALWAYS);
-//        root.getChildren().add(vBox);
-//        Scene scene = new Scene(root, 800, 625);
-//        primaryStage.setTitle("крокодильчик");
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-//
-//        txtAreaDisplay.appendText("Connected. \n");
     }
 
     public static void main(String[] args) {
@@ -194,33 +81,6 @@ public class Test extends Application implements ConnectionListener {
     }
 
 
-//    private void initDraw(GraphicsContext gc) {
-//
-//        colorPicker = new ColorPicker();
-//
-//        double canvasWidth = gc.getCanvas().getWidth();
-//        double canvasHeight = gc.getCanvas().getHeight();
-//
-//        gc.setFill(Color.LIGHTGRAY);
-//        gc.setStroke(Color.BLACK);
-//        gc.setLineWidth(5);
-//
-//        gc.fill();
-//        gc.strokeRect(
-//                0,              //x of the upper left corner
-//                0,              //y of the upper left corner
-//                canvasWidth,    //width of the rectangle
-//                canvasHeight);  //height of the rectangle
-//
-//        gc.setFill(colorPicker.getValue());
-//        gc.setStroke(colorPicker.getValue());
-//        gc.setLineWidth(3);
-//    }
-//    public void fillOvalX(double x, double y, double w, double h) {
-//        // a possible approach
-//        commands.put(new DrawCommand(Type.FILL_OVAL, x, y, w, h));
-//        g.fillOval(x, y, w, h);
-//    }
 @Override
 public void onConnectionReady(Connection connection) {
 //    connectionArrayList.add(connection);
@@ -238,12 +98,12 @@ public void onConnectionReady(Connection connection) {
         if(!value.equals("null")) {
             if (value.equals("StartFirst")) {
                 connection.isCommander = true;
+            } else {
+                //принимаю что началась рисовка
+                if (value.equals("GameIsStarting")) {
+                    onStartDrawing(connection, true);
+                } else printMessage(value);
             }
-            //принимаю что началась рисовка
-            if(value.equals("GameIsStarting")){
-                onStartDrawing(connection, true);
-            }
-            else printMessage(value);
         }
     }
 
@@ -270,26 +130,5 @@ public void onConnectionReady(Connection connection) {
         });
     }
 
-//    private class ButtonListener implements EventHandler<javafx.event.ActionEvent> {
-//        Connection connection;
-//
-//        @Override
-//        public void handle(javafx.event.ActionEvent e) {
-//            String username = txtName.getText().trim();
-//            String message = txtInput.getText().trim();
-//
-//            if (username.length() == 0) {
-//                username = "Unknown";
-//            }
-//            if (message.length() == 0) {
-//                return;
-//            }
-//
-//            connection.sendString("[" + username + "]: " + message + "");
-//
-//            txtInput.clear();
-//
-//        }
-//    }
 }
 

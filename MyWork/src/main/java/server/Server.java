@@ -36,21 +36,6 @@ public class Server extends Application implements ConnectionListener{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        txtAreaDisplay = new TextArea();
-        txtAreaDisplay.setEditable(false);
-
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(txtAreaDisplay);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setFitToWidth(true);
-
-        Scene scene = new Scene(scrollPane, 450, 500);
-        primaryStage.setTitle("Server: JavaFx Text Chat App");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        Platform.runLater(()
-                -> txtAreaDisplay.appendText("New server started at " + new Date() + '\n'));
         try(ServerSocket socket = new ServerSocket(8181)){
             while(true){
                 try {

@@ -77,6 +77,8 @@ public class Draw  {
 
                         @Override
                         public void handle(MouseEvent event) {
+                            isStart = true;
+                            drawingService.isStartGame(isStart);
                             double x = event.getX();
                             double y= event.getY();
                             graphicsContext.lineTo(x,y);
@@ -183,11 +185,7 @@ public class Draw  {
         gc.setStroke(colorPicker.getValue());
         gc.setLineWidth(3);
     }
-//    public void fillOvalX(double x, double y, double w, double h) {
-//        // a possible approach
-//        commands.put(new DrawCommand(Type.FILL_OVAL, x, y, w, h));
-//        g.fillOval(x, y, w, h);
-//    }
+
 
     public synchronized void getPicture(double x, double y, GraphicsContext graphicsContext) {
         graphicsContext.beginPath();
