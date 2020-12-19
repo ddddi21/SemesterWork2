@@ -19,9 +19,10 @@ public class Connection {
     private Thread thread;
     private final List<Room> rooms = new ArrayList<>();
     public Boolean isCommander = false;
-    private BufferedReader in;
+    public BufferedReader in;
     public BufferedWriter out;
     public Integer id;
+    public String guessWord;
     SendDrawingService drawingService = new SendDrawingService();
 
     public Connection(ConnectionListener connectionListener, String ip, Integer port) throws IOException{

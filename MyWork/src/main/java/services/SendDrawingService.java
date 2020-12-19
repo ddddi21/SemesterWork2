@@ -8,26 +8,12 @@ import network.Connection;
 import java.util.ArrayList;
 
 public class SendDrawingService {
-    public ArrayList<Connection> playersArrayList = new ArrayList<>();
-    Connection commander;
-    ArrayList <Connection> allPlayers = new ArrayList<>();
     StringBuilder gettingFromCommander;
     StringBuilder sendingToPlayers = new StringBuilder();
     Boolean isStart= false;
 
 
-    //получаем игроков, которые угадывают
-    public void getPlayers(Connection connection){
-        playersArrayList.add(connection);
-    }
 
-    public void getCommander(Connection connection){
-        this.commander = connection;
-    }
-
-    public void getAllPlayers(Connection connection){
-        this.allPlayers.add(connection);
-    }
 
     public void receivePictureFromCommander(double x, double y, Color colorPicker){
 

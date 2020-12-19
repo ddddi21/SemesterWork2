@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Test extends Application implements ConnectionListener {
-    private Connection connection;
-    Draw draw = new Draw();
+public class Client extends Application implements ConnectionListener {
+    public Connection connection;
+    public Draw draw = new Draw();
     SendDrawingService drawingService = new SendDrawingService();
     private final ArrayList<Connection> connectionArrayList = new ArrayList<>();
 
@@ -108,7 +108,10 @@ public void onConnectionReady(Connection connection) {
                         printMessage("Вы победили!");
                         theEnd();
                     }
-                    else printMessage(value);
+                        else {
+                        connection.guessWord = draw.guessWord;
+                            printMessage(value);
+                    }
                 }
             }
         }

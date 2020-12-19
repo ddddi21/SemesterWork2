@@ -6,10 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -19,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import network.Connection;
 import services.SendDrawingService;
+import services.UserService;
+import services.WordService;
 
 import java.lang.reflect.Field;
 
@@ -36,6 +35,10 @@ public class Draw  {
     public Boolean isStart = false;
     public Integer id;
     public Boolean wantToEscape = false;
+    public String guessWord;
+    TextField word = new TextField();
+    WordService wordService = new WordService();
+    UserService userService = new UserService();
 
     public void start(Stage primaryStage) throws Exception {
         Group root = new Group();
@@ -132,9 +135,13 @@ public class Draw  {
                 }
             });
 
+            guessWord =  wordService.randomChoosing();
+            word.setText("Ваше слово:" + guessWord);
+            connection.guessWord = guessWord;
+
             HBox topBox = new HBox();
 
-            topBox.getChildren().addAll(colorPicker,clean);
+            topBox.getChildren().addAll(colorPicker,clean, word);
             HBox.setHgrow(clean,Priority.ALWAYS);
             HBox.setHgrow(colorPicker,Priority.ALWAYS);
             vBox.getChildren().addAll(topBox,canvas, scrollPane);
@@ -153,8 +160,10 @@ public class Draw  {
             vBox.getChildren().addAll(canvas, scrollPane, hBox);
 
             //если начал рисовать вывзыается метод для отрисовки
-            if(drawingService.sendIsStartGame())
-            draw(graphicsContext);
+//            if(drawingService.sendIsStartGame())
+
+//                draw(graphicsContext);
+
 
         }
 
@@ -237,20 +246,19 @@ public class Draw  {
     }
 
     public void draw(GraphicsContext graphicsContext){
-        if(isStart) {
-            while (true) {
                 getDrawing = drawingService.sendPictureToPlayers();
-                drawsAtributes = getDrawing.toString().split("#");
-                double x = Double.parseDouble(drawsAtributes[0]);
-                double y = Double.parseDouble(drawsAtributes[1]);
-                ColorPicker colorPicker = new ColorPicker();
-                colorPicker.setValue(stringToColor(drawsAtributes[2]));
-                graphicsContext.beginPath();
-                graphicsContext.moveTo(x, y);
-                graphicsContext.setStroke(colorPicker.getValue());
-                graphicsContext.stroke();
-            }
-        }
+                if (!getDrawing.toString().isEmpty()) {
+                    drawsAtributes = getDrawing.toString().split("#");
+                    double x = Double.parseDouble(drawsAtributes[0]);
+                    double y = Double.parseDouble(drawsAtributes[1]);
+                    ColorPicker colorPicker = new ColorPicker();
+                    colorPicker.setValue(stringToColor(drawsAtributes[2]));
+                    graphicsContext.beginPath();
+                    graphicsContext.moveTo(x, y);
+                    graphicsContext.setStroke(colorPicker.getValue());
+                    graphicsContext.stroke();
+                }
+
     }
 
 }
