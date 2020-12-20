@@ -4,7 +4,6 @@ package network;
 import drawing.Draw;
 import javafx.scene.canvas.GraphicsContext;
 import room.Room;
-import server.Server;
 import services.SendDrawingService;
 
 import java.io.*;
@@ -15,14 +14,14 @@ import java.util.List;
 
 public class Connection {
     ConnectionListener connectionListener;
-    private Socket socket;
+    public Socket socket;
     private Thread thread;
+    boolean isDraw = false;
     private final List<Room> rooms = new ArrayList<>();
     public Boolean isCommander = false;
-    public BufferedReader in;
+    private BufferedReader in;
     public BufferedWriter out;
     public Integer id;
-    public String guessWord;
     SendDrawingService drawingService = new SendDrawingService();
 
     public Connection(ConnectionListener connectionListener, String ip, Integer port) throws IOException{
@@ -44,8 +43,13 @@ public class Connection {
 //                    }else Server.isHasCommander = false;
                     connectionListener.onConnectionReady(Connection.this);
                     while (!thread.isInterrupted()){
-                        connectionListener.onReceiveString(Connection.this, in.readLine());
-                        connectionListener.onStartDrawing(Connection.this, drawingService.sendIsStartGame());
+                        System.out.println("Connection before receive");
+                        connectionListener.onReceiveString(Connection.this, Connection.this.in.readLine());
+                        System.out.println("Connection receive");
+                        if(!isDraw) {
+                            isDraw = true;
+                            connectionListener.onStartDrawing(Connection.this, drawingService.sendIsStartGame());
+                        }
                         //хотела поставить слушателя на начало рисовки
                     }
                 } catch (IOException e) {
@@ -61,6 +65,7 @@ public class Connection {
 
     public synchronized void sendString(String string){
         try {
+            System.out.println("Connection/Отправил: "+string);
             out.write(string + "\r\n");
             out.flush();
         } catch (IOException e) {

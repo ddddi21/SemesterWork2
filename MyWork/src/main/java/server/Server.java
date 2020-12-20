@@ -1,38 +1,37 @@
 package server;
 
 
+import drawing.Draw;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import main.Client;
+import javafx.stage.WindowEvent;
+import main.Test;
 import network.Connection;
 import network.ConnectionListener;
 import room.Room;
 import services.SendDrawingService;
-import services.UserService;
-import services.WordService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Server extends Application implements ConnectionListener{
-    public TextArea txtAreaDisplay;
+    /*public TextArea txtAreaDisplay;*/ //Нам ето не нужон
     public static final ArrayList<Connection> connectionArrayList = new ArrayList<>();
-    public static String guessWord = "";
-    private Room currentRoom;
-    private final List<Room> rooms = new ArrayList<>();
+/*    private final List<Room> rooms = new ArrayList<>();*/   //Нам ето не нужон
     public static Boolean isHasCommander = false;
-    SendDrawingService drawingService = new SendDrawingService();
-    public Connection commander;
-    WordService wordService = new WordService();
-    Boolean isWin = false;
-    UserService userService = new UserService();
-    String[] text;
+   SendDrawingService drawingService = new SendDrawingService();
 //    private Client2 client = new Client2();
-    private Client client = new Client();
+/*    private Test client = new Test();*/       //Нам ето не нужон
+    private Room currentRoom;
 
 
     @Override
@@ -65,11 +64,10 @@ public class Server extends Application implements ConnectionListener{
 //        currentRoom.list.add(connection);
         connectionArrayList.add(connection);
         connection.id = connectionArrayList.indexOf(connection);
-        userService.getAllPlayers(connection);
+        drawingService.getAllPlayers(connection);
         //первый подключенный игрок становится ведущим
         if (connectionArrayList.get(0) == connection) {
-            userService.getCommander(connection);
-            commander = connection;
+            drawingService.getCommander(connection);
                 try{
                     connection.out.write("StartFirst\n");
                     connection.out.flush();
@@ -77,7 +75,7 @@ public class Server extends Application implements ConnectionListener{
                     e.printStackTrace();
                 }
             } else {
-            userService.getPlayers(connection);
+            drawingService.getPlayers(connection);
         }
 
 
@@ -86,27 +84,12 @@ public class Server extends Application implements ConnectionListener{
 
     @Override
     public synchronized void onReceiveString(Connection connection, String value) {
+        System.out.println("Server/Получил: "+value );
         if(!value.equals("null")) {
-            isWin = wordService.isRightWord(value,guessWord);
-            if(isWin){
-                try {
-                    connection.out.write("win\n");
-                    connection.out.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Platform.runLater(() -> {
-                    txtAreaDisplay.appendText("Игра окончена!" + "\n");
-                });
-                sendToAll("Игра окончена!" + "\n");
-            } else {
-
-                    sendToAll(value);
-                    Platform.runLater(() -> {
-                        txtAreaDisplay.appendText(value + "\n");
-                    });
-
-            }
+            sendToAll(value);
+/*            Platform.runLater(() -> {
+                txtAreaDisplay.appendText(value + "\n");
+            });*/           //Нам ето не нужон
         }
     }
 
@@ -124,6 +107,7 @@ public class Server extends Application implements ConnectionListener{
     //передаю в коннекшн что начал рисвать
     @Override
     public void onStartDrawing(Connection connection, boolean isStart) {
+        System.out.println("Server: Начал рисовать");
         if(isStart){
             try {
                 connection.out.write("GameIsStarting");
@@ -138,16 +122,6 @@ public class Server extends Application implements ConnectionListener{
         for (Connection connection: connectionArrayList) {
             connection.sendString(string);
         }
-    }
-
-    public boolean isRightAnswer(String word){
-        text = word.split(":");
-        guessWord = commander.guessWord;
-        boolean guess = false;
-        if (guessWord.equals(text[1].trim().toLowerCase())) {
-            guess = true;
-
-        } return guess;
     }
 
 }
