@@ -1,8 +1,7 @@
 package network;
 
 
-import drawing.Draw;
-import javafx.scene.canvas.GraphicsContext;
+
 import room.Room;
 import services.SendDrawingService;
 
@@ -22,7 +21,6 @@ public class Connection {
     private BufferedReader in;
     public BufferedWriter out;
     public Integer id;
-    SendDrawingService drawingService = new SendDrawingService();
 
     public Connection(ConnectionListener connectionListener, String ip, Integer port) throws IOException{
         this(connectionListener, new Socket(ip,port));
@@ -37,20 +35,11 @@ public class Connection {
             @Override
             public void run() {
                 try {
-//                   Connection.this.isCommander = randomCommander(Server.isHasCommander);
-//                    if(Connection.this.isCommander){
-//                        Server.isHasCommander = true;
-//                    }else Server.isHasCommander = false;
                     connectionListener.onConnectionReady(Connection.this);
                     while (!thread.isInterrupted()){
                         System.out.println("Connection before receive");
                         connectionListener.onReceiveString(Connection.this, Connection.this.in.readLine());
                         System.out.println("Connection receive");
-                        if(!isDraw) {
-                            isDraw = true;
-                            connectionListener.onStartDrawing(Connection.this, drawingService.sendIsStartGame());
-                        }
-                        //хотела поставить слушателя на начало рисовки
                     }
                 } catch (IOException e) {
                     connectionListener.onException(Connection.this,e);
@@ -104,21 +93,5 @@ public class Connection {
     @Override
     public String toString(){
         return "Connection" + socket.getInetAddress() + ": " + socket.getPort();
-    }
-
-    public static boolean randomCommander(boolean ishas){
-        if(!ishas) {
-            int random = (int) (Math.random() * 10);
-            int x = 3;
-            return random == x;
-        }return false;
-
-    }
-
-    public synchronized void getPicture(double x, double y, GraphicsContext graphicsContext,  Draw draw) {
-        graphicsContext.beginPath();
-        graphicsContext.moveTo(x,y);
-        graphicsContext.setStroke(draw.colorPicker.getValue());
-        graphicsContext.stroke();
     }
 }

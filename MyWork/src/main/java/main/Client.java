@@ -13,16 +13,12 @@ import javafx.stage.WindowEvent;
 import drawing.Draw;
 import network.Connection;
 import network.ConnectionListener;
-import services.SendDrawingService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 
-public class Test extends Application implements ConnectionListener {
-    private final ArrayList<Connection> connectionArrayList = new ArrayList<>();
+public class Client extends Application implements ConnectionListener {
     Draw draw = new Draw();
-    /*SendDrawingService drawingService = new SendDrawingService();*/  //Нам ето не нужон
     private Connection connection;
 
     public static void main(String[] args) {
@@ -62,7 +58,7 @@ public class Test extends Application implements ConnectionListener {
                     else printMessage("ты угадываешь!");
                     ((Node) (event.getSource())).getScene().getWindow().hide();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    onException(connection,e);
                 }
             }
         });
@@ -98,23 +94,27 @@ public class Test extends Application implements ConnectionListener {
             if (value.equals("StartFirst")) {
                 connection.isCommander = true;
                 System.out.println("Найден командер");
-            } else if (value.equals("GameIsStarting")) {
-                onStartDrawing(connection, true);
-                System.out.println("Начало игры");
             } else if((value.charAt(0)+"").equals("#")){
-                if((value.charAt(1)+"").equals("s")){
-                    String info = value.substring(2);
-                    System.out.println("Test/Получил: "+info);
-                    if(!connection.isCommander) draw.startDraw(draw.graphicsContext,info);
-                }else if ((value.charAt(1)+"").equals("m")) {
-                    String info = value.substring(2);
-                    System.out.println("Test/Получил: "+info);
-                    if(!connection.isCommander) draw.draw(draw.graphicsContext,info);
+                switch ((value.charAt(1) + "")) {
+                    case "s": {
+                        String info = value.substring(2);
+                        System.out.println("Test/Получил: " + info);
+                        if (!connection.isCommander) draw.startDraw(draw.graphicsContext, info);
+                        break;
+                    }
+                    case "m": {
+                        String info = value.substring(2);
+                        System.out.println("Test/Получил: " + info);
+                        if (!connection.isCommander) draw.draw(draw.graphicsContext, info);
+                        break;
+                    }
+                    case "c":
+                        if (!connection.isCommander) draw.clear();
+                        break;
+                    default:
+                        printMessage(value);
+                        break;
                 }
-                else if((value.charAt(1)+"").equals("c")){
-                    if(!connection.isCommander) draw.clear();
-                }
-                else printMessage(value);
             }else printMessage(value);
         }
     }
@@ -130,11 +130,6 @@ public class Test extends Application implements ConnectionListener {
 //        printMessage("Connection exception: " + e);
     }
 
-    //присваиваю тру в классе где я потом этот тру должна видеть чтобы начать отрисоввыать но все пошло по одному месту
-    @Override
-    public void onStartDrawing(Connection connection, boolean isStart) {
-        draw.isStart = true;
-    }
 
     private synchronized void printMessage(String message) {
         Platform.runLater(() -> {

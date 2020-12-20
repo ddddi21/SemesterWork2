@@ -1,17 +1,8 @@
 package server;
 
 
-import drawing.Draw;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import main.Test;
 import network.Connection;
 import network.ConnectionListener;
 import room.Room;
@@ -20,22 +11,17 @@ import services.SendDrawingService;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 
 public class Server extends Application implements ConnectionListener{
-    /*public TextArea txtAreaDisplay;*/ //Нам ето не нужон
     public static final ArrayList<Connection> connectionArrayList = new ArrayList<>();
 /*    private final List<Room> rooms = new ArrayList<>();*/   //Нам ето не нужон
-    public static Boolean isHasCommander = false;
    SendDrawingService drawingService = new SendDrawingService();
-//    private Client2 client = new Client2();
-/*    private Test client = new Test();*/       //Нам ето не нужон
     private Room currentRoom;
 
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         try(ServerSocket socket = new ServerSocket(8181)){
             while(true){
                 try {
@@ -87,9 +73,7 @@ public class Server extends Application implements ConnectionListener{
         System.out.println("Server/Получил: "+value );
         if(!value.equals("null")) {
             sendToAll(value);
-/*            Platform.runLater(() -> {
-                txtAreaDisplay.appendText(value + "\n");
-            });*/           //Нам ето не нужон
+
         }
     }
 
@@ -104,19 +88,6 @@ public class Server extends Application implements ConnectionListener{
         System.out.println("Connection exception: " + e);
     }
 
-    //передаю в коннекшн что начал рисвать
-    @Override
-    public void onStartDrawing(Connection connection, boolean isStart) {
-        System.out.println("Server: Начал рисовать");
-        if(isStart){
-            try {
-                connection.out.write("GameIsStarting");
-                connection.out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void sendToAll(String string){
         for (Connection connection: connectionArrayList) {

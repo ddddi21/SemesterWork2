@@ -69,11 +69,6 @@ public class SendDrawingService {
         sendingToPlayers = stringBuilder;
     }
 
-//    public void fjkdjn(Integer drawId,ArrayList<Connection> playersArrayList ){
-//        for (int i = 0; i < playersArrayList.size()-1; i++) {
-//            drawId
-//        }
-//    }
     public void isStartGame(Boolean start){
         this.isStart = start;
     }
@@ -86,16 +81,5 @@ public class SendDrawingService {
         out.println("#c");
         out.flush();
     }
-    //отправлю кому надо что начал рисовать
-
-
-
-
-
-//        public synchronized void drawToAll(double x, double y, GraphicsContext graphicsContext, Draw draw) {
-//        for(Connection connection: connectionArrayList) {
-//            connection.getPicture();
-//        }
-//    }
 
 }

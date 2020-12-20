@@ -32,7 +32,6 @@ public class Draw  {
     public GraphicsContext graphicsContext;
     SendDrawingService drawingService = new SendDrawingService();
     String[] drawsAtributes = new String[3];
-    public Boolean isStart = false;
     public Integer id;
 
     public static Color convertHexToRgb(String colorStr) {
@@ -78,8 +77,6 @@ public class Draw  {
                             graphicsContext.moveTo(x, y);
                             graphicsContext.setStroke(colorPicker.getValue());
                             graphicsContext.stroke();
-                            isStart = true;
-                            drawingService.isStartGame(isStart);
                             drawingService.receivePictureFromCommander(x,y,colorPicker.getValue());
                             drawingService.sendStartLine();
                             //если он начал рисовать передаю тру
@@ -91,14 +88,11 @@ public class Draw  {
 
                         @Override
                         public void handle(MouseEvent event) {
-                            isStart = true;
-                            drawingService.isStartGame(isStart);
                             double x = event.getX();
                             double y= event.getY();
                             graphicsContext.lineTo(x,y);
                             graphicsContext.setStroke(colorPicker.getValue());
                             graphicsContext.stroke();
-                            Color color = colorPicker.getValue();
                             drawingService.receivePictureFromCommander(x,y,colorPicker.getValue());
                             drawingService.sendPictureToPlayers();
                         }
@@ -185,13 +179,6 @@ public class Draw  {
     }
 
 
-    public synchronized void getPicture(double x, double y, GraphicsContext graphicsContext) {
-        graphicsContext.beginPath();
-        graphicsContext.moveTo(x,y);
-        graphicsContext.setStroke(colorPicker.getValue());
-        graphicsContext.stroke();
-    }
-
     public void clear(){
         double canvasWidth = graphicsContext.getCanvas().getWidth();
         double canvasHeight = graphicsContext.getCanvas().getHeight();
@@ -224,7 +211,6 @@ public class Draw  {
 
     public void draw(GraphicsContext graphicsContext,String getDrawing){
         System.out.println("Draw: Try to draw");
-        if(isStart) {
                 System.out.println("DrawsAtributes: " +getDrawing);
                 drawsAtributes = getDrawing.split("#");
                 double x = Double.parseDouble(drawsAtributes[0]);
@@ -234,7 +220,6 @@ public class Draw  {
                 graphicsContext.lineTo(x,y);
                 graphicsContext.setStroke(colorPicker.getValue());
                 graphicsContext.stroke();
-        }
     }
 
     //слушатель на отправку сообщений в чат, который впоследствии отправляет другим клиентам сообщение
