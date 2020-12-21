@@ -89,7 +89,7 @@ public class Server extends Application implements ConnectionListener{
                     connection.out.write("win\n");
                     connection.out.flush();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    onException(connection,e);
                 }
                 sendToAll("Игра окончена!" + "\n");
             } else {
