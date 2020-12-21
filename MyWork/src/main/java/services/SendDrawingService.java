@@ -76,7 +76,7 @@ public class SendDrawingService {
 
 
     public void sendCorrectAnswerToServer(String guesstionWord){
-        out.println("#correct" + guesstionWord);
+        out.println("#correct:" + guesstionWord);
         out.flush();
     }
 }
