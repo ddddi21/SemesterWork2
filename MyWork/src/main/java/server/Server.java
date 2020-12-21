@@ -33,7 +33,7 @@ public class Server extends Application implements ConnectionListener{
 
     @Override
     public void start(Stage primaryStage) {
-        try(ServerSocket socket = new ServerSocket(8181)){
+        try(ServerSocket socket = new ServerSocket(7181)){
             while(true){
                 try {
                     new Connection(this, socket.accept());
@@ -85,7 +85,10 @@ public class Server extends Application implements ConnectionListener{
         if(!value.equals("null")) {
             //нужен фикс
             //подозреваю что баг здесь
-            isWin = wordService.isRightWord(value,guessWord);
+            if (value.startsWith("#a")) {
+                isWin = wordService.isRightWord(value, guessWord);
+                value = value.substring(2);
+            }
             if(isWin){
                 try {
                     connection.out.write("win\n");
@@ -95,6 +98,9 @@ public class Server extends Application implements ConnectionListener{
                 }
                 sendToAll("Игра окончена!" + "\n");
             } else {
+                if (value.startsWith("#correct")) {
+                    guessWord = value.split(":")[1];
+                }
                 sendToAll(value);
             }
 

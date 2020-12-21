@@ -82,4 +82,9 @@ public class SendDrawingService {
         out.flush();
     }
 
+
+    public void sendCorrectAnswerToServer(String guesstionWord){
+        out.println("#correct" + guesstionWord);
+        out.flush();
+    }
 }

@@ -28,7 +28,7 @@ public class Client extends Application implements ConnectionListener {
     @Override
     public void start(Stage primaryStage) {
         try {
-            connection = new Connection(this, "localhost", 8181);
+            connection = new Connection(this, "localhost", 7181);
             System.out.println("Test connection: "+ connection);
             System.out.println("Test socket: "+ connection.socket);
 //            txtAreaDisplay.appendText("Connected. \n");
@@ -123,7 +123,8 @@ public class Client extends Application implements ConnectionListener {
                             printMessage(value);
                             break;
                     }
-                }else printMessage(value);
+                }else  if(!value.startsWith("#correct"))
+                        printMessage(value);
             }
 
         }

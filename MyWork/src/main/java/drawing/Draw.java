@@ -139,6 +139,8 @@ public class Draw  {
             guessWord =  wordService.randomChoosing();
             word.setText("Ваше слово:" + guessWord);
             connection.guessWord = guessWord;
+            word.setEditable(false);
+            drawingService.sendCorrectAnswerToServer(guessWord);
 
         } else{
             txtName = new javafx.scene.control.TextField();
@@ -251,7 +253,7 @@ public class Draw  {
                 return;
             }
 
-            connection.sendString("[" + username + "]: " + message + "");
+            connection.sendString("#a[" + username + "]: " + message + "");
 
             txtInput.clear();
 
