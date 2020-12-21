@@ -4,10 +4,15 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import drawing.Draw;
@@ -21,6 +26,15 @@ public class Client extends Application implements ConnectionListener {
     Draw draw = new Draw();
     private Connection connection;
 
+    @FXML
+    Group start;
+    @FXML
+    Button startGame;
+    @FXML
+    TextArea textArea;
+    @FXML
+    VBox vBox;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -28,6 +42,7 @@ public class Client extends Application implements ConnectionListener {
     @Override
     public void start(Stage primaryStage) {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/lobby.fxml"));
             connection = new Connection(this, "localhost", 7181);
             System.out.println("Test connection: "+ connection);
             System.out.println("Test socket: "+ connection.socket);
@@ -39,14 +54,20 @@ public class Client extends Application implements ConnectionListener {
         draw.id = connection.id;
 
         //отрисовываем первое окошко входа в игру
-        Group start = new Group();
-        Button startGame = new Button("start game");
+        start = new Group();
+        startGame = new Button("Start game");
+        startGame.setPrefWidth(525);
+        startGame.setAlignment(Pos.CENTER);
+        textArea = new TextArea("\n\n                                                            КРОКОДИЛ");
+        textArea.setPrefHeight(100);
+        textArea.setEditable(false);
+        vBox = new VBox();
+        vBox.getChildren().addAll(textArea,startGame);
 
-
-        start.getChildren().addAll(startGame);
+        start.getChildren().addAll(vBox);
 
         //новое окошко при нажатии "начать игру"
-        Scene scene = new Scene(start, 800, 625);
+        Scene scene = new Scene(start, 500, 425);
         startGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
