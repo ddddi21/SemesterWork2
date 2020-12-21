@@ -68,6 +68,9 @@ public class Server extends Application implements ConnectionListener{
                 }
             } else {
             drawingService.getPlayers(connection);
+            //все еще не работает паразит
+            sendToAll("new player come in!");
+
         }
 
 

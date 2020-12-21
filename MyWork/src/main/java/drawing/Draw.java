@@ -137,7 +137,7 @@ public class Draw  {
             HBox.setHgrow(colorPicker,Priority.ALWAYS);
             vBox.getChildren().addAll(topBox,canvas, scrollPane);
             guessWord =  wordService.randomChoosing();
-            word.setText("Ваше слово:" + guessWord);
+            word.setText("Ваше слово: " + guessWord);
             connection.guessWord = guessWord;
             word.setEditable(false);
             drawingService.sendCorrectAnswerToServer(guessWord);
@@ -193,8 +193,6 @@ public class Draw  {
         gc.setFill(colorPicker.getValue());
         gc.setStroke(colorPicker.getValue());
         gc.setLineWidth(3);
-        //почиму не работает....
-        connection.sendString("new player come in!");
     }
 
 
