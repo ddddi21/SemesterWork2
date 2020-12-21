@@ -21,6 +21,8 @@ public class Connection {
     private BufferedReader in;
     public BufferedWriter out;
     public Integer id;
+    public String guessWord;
+
 
     public Connection(ConnectionListener connectionListener, String ip, Integer port) throws IOException{
         this(connectionListener, new Socket(ip,port));

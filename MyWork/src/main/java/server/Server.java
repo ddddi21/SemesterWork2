@@ -3,10 +3,13 @@ package server;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import main.Client;
 import network.Connection;
 import network.ConnectionListener;
 import room.Room;
 import services.SendDrawingService;
+import services.UserService;
+import services.WordService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,6 +21,14 @@ public class Server extends Application implements ConnectionListener{
 /*    private final List<Room> rooms = new ArrayList<>();*/   //Нам ето не нужон
    SendDrawingService drawingService = new SendDrawingService();
     private Room currentRoom;
+    public static String guessWord = "";
+    public Connection commander;
+    UserService userService = new UserService();
+    String[] text;
+    WordService wordService = new WordService();
+    Boolean isWin = false;
+    private Client client = new Client();
+
 
 
     @Override
@@ -72,7 +83,20 @@ public class Server extends Application implements ConnectionListener{
     public synchronized void onReceiveString(Connection connection, String value) {
         System.out.println("Server/Получил: "+value );
         if(!value.equals("null")) {
-            sendToAll(value);
+            //нужен фикс
+            //подозреваю что баг здесь
+            isWin = wordService.isRightWord(value,guessWord);
+            if(isWin){
+                try {
+                    connection.out.write("win\n");
+                    connection.out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                sendToAll("Игра окончена!" + "\n");
+            } else {
+                sendToAll(value);
+            }
 
         }
     }
@@ -93,6 +117,17 @@ public class Server extends Application implements ConnectionListener{
         for (Connection connection: connectionArrayList) {
             connection.sendString(string);
         }
+    }
+
+    //нужен фикс
+    public boolean isRightAnswer(String word){
+        text = word.split(":");
+        guessWord = commander.guessWord;
+        boolean guess = false;
+        if (guessWord.equals(text[1].trim().toLowerCase())) {
+            guess = true;
+
+        } return guess;
     }
 
 }

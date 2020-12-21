@@ -94,30 +94,40 @@ public class Client extends Application implements ConnectionListener {
             if (value.equals("StartFirst")) {
                 connection.isCommander = true;
                 System.out.println("Найден командер");
-            } else if((value.charAt(0)+"").equals("#")){
-                switch ((value.charAt(1) + "")) {
-                    case "s": {
-                        String info = value.substring(2);
-                        System.out.println("Test/Получил: " + info);
-                        if (!connection.isCommander) draw.startDraw(draw.graphicsContext, info);
-                        break;
+            }
+            //нужен фикс
+//            else {
+//                //проверяю на угаданное слово
+//                if(value.equals("win")){
+//                    printMessage("Вы победили!");
+//                    theEnd();
+//                }
+                else if((value.charAt(0)+"").equals("#")){
+                    switch ((value.charAt(1) + "")) {
+                        case "s": {
+                            String info = value.substring(2);
+                            System.out.println("Test/Получил: " + info);
+                            if (!connection.isCommander) draw.startDraw(draw.graphicsContext, info);
+                            break;
+                        }
+                        case "m": {
+                            String info = value.substring(2);
+                            System.out.println("Test/Получил: " + info);
+                            if (!connection.isCommander) draw.draw(draw.graphicsContext, info);
+                            break;
+                        }
+                        case "c":
+                            if (!connection.isCommander) draw.clear();
+                            break;
+                        default:
+                            printMessage(value);
+                            break;
                     }
-                    case "m": {
-                        String info = value.substring(2);
-                        System.out.println("Test/Получил: " + info);
-                        if (!connection.isCommander) draw.draw(draw.graphicsContext, info);
-                        break;
-                    }
-                    case "c":
-                        if (!connection.isCommander) draw.clear();
-                        break;
-                    default:
-                        printMessage(value);
-                        break;
-                }
-            }else printMessage(value);
+                }else printMessage(value);
+            }
+
         }
-    }
+
 
     @Override
     public void onDisconnect(Connection connection) {
@@ -137,5 +147,8 @@ public class Client extends Application implements ConnectionListener {
         });
     }
 
+    //возможно в будущем добавлю вывод имени угадавшего
+    private void theEnd(){
+    }
 }
 

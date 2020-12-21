@@ -6,10 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -19,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import network.Connection;
 import services.SendDrawingService;
+import services.UserService;
+import services.WordService;
 
 
 public class Draw  {
@@ -33,6 +32,10 @@ public class Draw  {
     SendDrawingService drawingService = new SendDrawingService();
     String[] drawsAtributes = new String[3];
     public Integer id;
+    public String guessWord;
+    TextField word = new TextField();
+    WordService wordService = new WordService();
+    UserService userService = new UserService();
 
     public static Color convertHexToRgb(String colorStr) {
         colorStr = colorStr.substring(2);
@@ -56,6 +59,16 @@ public class Draw  {
         scrollPane.setContent(txtAreaDisplay);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
+
+        //когда нибудь я это сделаю
+//        Button exit = new Button("выйти");
+//        //если успею сделаю выход на начальное окно
+//        exit.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                wantToEscape = true;
+//            }
+//        });
 
 
         final Canvas canvas = new Canvas(600, 300);
@@ -119,11 +132,13 @@ public class Draw  {
             });
 
             HBox topBox = new HBox();
-            topBox.getChildren().addAll(colorPicker,clean);
+            topBox.getChildren().addAll(colorPicker,clean, word);
             HBox.setHgrow(clean,Priority.ALWAYS);
             HBox.setHgrow(colorPicker,Priority.ALWAYS);
             vBox.getChildren().addAll(topBox,canvas, scrollPane);
-
+            guessWord =  wordService.randomChoosing();
+            word.setText("Ваше слово:" + guessWord);
+            connection.guessWord = guessWord;
 
         } else{
             txtName = new javafx.scene.control.TextField();
