@@ -101,7 +101,7 @@ public class Server extends Application implements ConnectionListener{
                 if (value.startsWith("#correct")) {
                     guessWord = value.split(":")[1];
                 }
-                sendToAll(value);
+                else sendToAll(value);
             }
 
         }
