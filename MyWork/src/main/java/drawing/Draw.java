@@ -193,6 +193,8 @@ public class Draw  {
         gc.setFill(colorPicker.getValue());
         gc.setStroke(colorPicker.getValue());
         gc.setLineWidth(3);
+        //почиму не работает....
+        connection.sendString("new player come in!");
     }
 
 

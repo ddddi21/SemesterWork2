@@ -104,18 +104,21 @@ public class Client extends Application implements ConnectionListener {
 //                }
                 else if((value.charAt(0)+"").equals("#")){
                     switch ((value.charAt(1) + "")) {
+                        //если ведущий начал рисовать, начинаем отрисовывать другим игрокам
                         case "s": {
                             String info = value.substring(2);
                             System.out.println("Test/Получил: " + info);
                             if (!connection.isCommander) draw.startDraw(draw.graphicsContext, info);
                             break;
                         }
+                        //ведем линию
                         case "m": {
                             String info = value.substring(2);
                             System.out.println("Test/Получил: " + info);
                             if (!connection.isCommander) draw.draw(draw.graphicsContext, info);
                             break;
                         }
+                        //чистим поле
                         case "c":
                             if (!connection.isCommander) draw.clear();
                             break;
@@ -123,7 +126,8 @@ public class Client extends Application implements ConnectionListener {
                             printMessage(value);
                             break;
                     }
-                }else  if(!value.startsWith("#correct"))
+                }else //если ответ верный
+                    if(!value.startsWith("#correct"))
                         printMessage(value);
             }
 

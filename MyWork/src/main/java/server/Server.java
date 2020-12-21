@@ -3,12 +3,10 @@ package server;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import main.Client;
 import network.Connection;
 import network.ConnectionListener;
 import room.Room;
 import services.SendDrawingService;
-import services.UserService;
 import services.WordService;
 
 import java.io.IOException;
@@ -18,16 +16,13 @@ import java.util.ArrayList;
 
 public class Server extends Application implements ConnectionListener{
     public static final ArrayList<Connection> connectionArrayList = new ArrayList<>();
-/*    private final List<Room> rooms = new ArrayList<>();*/   //Нам ето не нужон
    SendDrawingService drawingService = new SendDrawingService();
     private Room currentRoom;
     public static String guessWord = "";
     public Connection commander;
-    UserService userService = new UserService();
     String[] text;
     WordService wordService = new WordService();
     Boolean isWin = false;
-    private Client client = new Client();
 
 
 
@@ -69,7 +64,7 @@ public class Server extends Application implements ConnectionListener{
                     connection.out.write("StartFirst\n");
                     connection.out.flush();
                 } catch (IOException e){
-                    e.printStackTrace();
+                    onException(connection,e);
                 }
             } else {
             drawingService.getPlayers(connection);

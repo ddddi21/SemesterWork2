@@ -4,6 +4,7 @@ import network.Connection;
 
 import java.util.ArrayList;
 
+//походу делит надо будет
 public class UserService {
     public ArrayList<Connection> playersArrayList = new ArrayList<>();
     public Connection commander;

@@ -69,14 +69,6 @@ public class SendDrawingService {
         sendingToPlayers = stringBuilder;
     }
 
-    public void isStartGame(Boolean start){
-        this.isStart = start;
-    }
-
-    public boolean sendIsStartGame(){
-        return isStart;
-    }
-
     public void cleanBoard() {
         out.println("#c");
         out.flush();

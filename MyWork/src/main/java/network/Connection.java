@@ -3,7 +3,6 @@ package network;
 
 
 import room.Room;
-import services.SendDrawingService;
 
 import java.io.*;
 import java.net.Socket;
