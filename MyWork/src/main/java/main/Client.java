@@ -129,9 +129,10 @@ public class Client extends Application implements ConnectionListener {
                 }else //если ответ верный
                     if(!value.startsWith("#correct"))
                         printMessage(value);
-            }
+            } else printMessage(value);
 
-        }
+
+    }
 
 
     @Override

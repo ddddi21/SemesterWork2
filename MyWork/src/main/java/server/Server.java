@@ -57,9 +57,11 @@ public class Server extends Application implements ConnectionListener{
         connectionArrayList.add(connection);
         connection.id = connectionArrayList.indexOf(connection);
         drawingService.getAllPlayers(connection);
+        System.out.println("список коннекшенов:" + connectionArrayList.toString()+"%");
         //первый подключенный игрок становится ведущим
         if (connectionArrayList.get(0) == connection) {
             drawingService.getCommander(connection);
+            System.out.println("Ведущий: "+ connection);
                 try{
                     connection.out.write("StartFirst\n");
                     connection.out.flush();
