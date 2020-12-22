@@ -14,7 +14,6 @@ public class Connection {
     ConnectionListener connectionListener;
     public Socket socket;
     private Thread thread;
-    boolean isDraw = false;
     private final List<Room> rooms = new ArrayList<>();
     public Boolean isCommander = false;
     private BufferedReader in;

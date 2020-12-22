@@ -71,8 +71,6 @@ public class Server extends Application implements ConnectionListener{
     public synchronized void onReceiveString(Connection connection, String value) {
         System.out.println("Server/Получил: "+value );
         if(!value.equals("null")) {
-            //нужен фикс
-            //подозреваю что баг здесь
             if (value.startsWith("#a")) {
                 isWin = wordService.isRightWord(value, guessWord);
                 value = value.substring(2);
@@ -113,16 +111,6 @@ public class Server extends Application implements ConnectionListener{
         }
     }
 
-    //нужен фикс
-    public boolean isRightAnswer(String word){
-        text = word.split(":");
-        guessWord = commander.guessWord;
-        boolean guess = false;
-        if (guessWord.equals(text[1].trim().toLowerCase())) {
-            guess = true;
-
-        } return guess;
-    }
 
     public void startServer(){
         try(ServerSocket socket = new ServerSocket(54181)){

@@ -98,13 +98,6 @@ public class Client extends Application implements ConnectionListener {
 
     @Override
     public void onConnectionReady(Connection connection) {
-//    connectionArrayList.add(connection);
-//    while(true){
-//        if (connectionArrayList.get(0) == connection) {
-//           connection.isCommander = true;
-//            break;
-//        }
-//    }
 //    printMessage("Connection ready..");
     }
 
@@ -116,13 +109,6 @@ public class Client extends Application implements ConnectionListener {
                 connection.isCommander = true;
                 System.out.println("Найден командер");
             }
-            //нужен фикс
-//            else {
-//                //проверяю на угаданное слово
-//                if(value.equals("win")){
-//                    printMessage("Вы победили!");
-//                    theEnd();
-//                }
                 else if((value.charAt(0)+"").equals("#")){
                     switch ((value.charAt(1) + "")) {
                         //если ведущий начал рисовать, начинаем отрисовывать другим игрокам

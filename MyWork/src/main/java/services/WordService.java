@@ -4,11 +4,9 @@ import guess.WordRepository;
 import static guess.WordRepository.*;
 
 public class WordService {
-    WordRepository repository = new WordRepository();
     String[] text;
 
-    //надо будет добавить на проверку не любого слова а загаданного
-    //нужен фикс
+
     public boolean isRightWord(String word, String guessWord){
         text = word.split(":");
         boolean guess = false;

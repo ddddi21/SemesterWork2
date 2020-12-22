@@ -21,7 +21,6 @@ public class SendDrawingService {
     ArrayList <Connection> allPlayers = new ArrayList<>();
     StringBuilder gettingFromCommander;
     StringBuilder sendingToPlayers = new StringBuilder();
-    Boolean isStart= false;
 
 
     //получаем игроков, которые угадывают
