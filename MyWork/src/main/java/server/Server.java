@@ -25,20 +25,9 @@ public class Server extends Application implements ConnectionListener{
     Boolean isWin = false;
 
 
-
     @Override
     public void start(Stage primaryStage) {
-        try(ServerSocket socket = new ServerSocket(7181)){
-            while(true){
-                try {
-                    new Connection(this, socket.accept());
-                } catch (IOException e){
-                    System.out.println("Connection exception: " + e);
-                }
-            }
-        } catch (IOException e){
-            throw  new RuntimeException(e);
-        }
+       startServer();
     }
 
     public static void main(String[] args) {
@@ -70,7 +59,6 @@ public class Server extends Application implements ConnectionListener{
                 }
             } else {
             drawingService.getPlayers(connection);
-            //все еще не работает паразит
             sendToAll("new player come in!");
 
         }
@@ -136,4 +124,17 @@ public class Server extends Application implements ConnectionListener{
         } return guess;
     }
 
+    public void startServer(){
+        try(ServerSocket socket = new ServerSocket(54181)){
+            while(true){
+                try {
+                    new Connection(this, socket.accept());
+                } catch (IOException e){
+                    System.out.println("Connection exception: " + e);
+                }
+            }
+        } catch (IOException e){
+            throw  new RuntimeException(e);
+        }
+    }
 }

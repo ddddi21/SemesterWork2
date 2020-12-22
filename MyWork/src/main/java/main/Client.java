@@ -43,7 +43,7 @@ public class Client extends Application implements ConnectionListener {
     public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/lobby.fxml"));
-            connection = new Connection(this, "localhost", 7181);
+            connection = new Connection(this, "localhost", 54181);
             System.out.println("Test connection: "+ connection);
             System.out.println("Test socket: "+ connection.socket);
 //            txtAreaDisplay.appendText("Connected. \n");
@@ -58,8 +58,8 @@ public class Client extends Application implements ConnectionListener {
         startGame = new Button("Start game");
         startGame.setPrefWidth(525);
         startGame.setAlignment(Pos.CENTER);
-        textArea = new TextArea("\n\n                                                            КРОКОДИЛ");
-        textArea.setPrefHeight(100);
+        textArea = new TextArea("\n\n \n                                                           КРОКОДИЛ");
+        textArea.setPrefHeight(200);
         textArea.setEditable(false);
         vBox = new VBox();
         vBox.getChildren().addAll(textArea,startGame);

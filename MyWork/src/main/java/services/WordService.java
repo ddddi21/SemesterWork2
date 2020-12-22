@@ -6,7 +6,6 @@ import static guess.WordRepository.*;
 public class WordService {
     WordRepository repository = new WordRepository();
     String[] text;
-    UserService userService = new UserService();
 
     //надо будет добавить на проверку не любого слова а загаданного
     //нужен фикс

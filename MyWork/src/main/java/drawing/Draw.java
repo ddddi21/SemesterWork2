@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import network.Connection;
 import services.SendDrawingService;
-import services.UserService;
 import services.WordService;
 
 
@@ -35,7 +34,6 @@ public class Draw  {
     public String guessWord;
     TextField word = new TextField();
     WordService wordService = new WordService();
-    UserService userService = new UserService();
 
     public static Color convertHexToRgb(String colorStr) {
         colorStr = colorStr.substring(2);
@@ -160,7 +158,7 @@ public class Draw  {
 
         vBox.setVgrow(scrollPane, Priority.ALWAYS);
         root.getChildren().add(vBox);
-        Scene scene = new Scene(root, 800, 625);
+        Scene scene = new Scene(root, 600, 625);
         primaryStage.setTitle("крокодильчик");
         primaryStage.setScene(scene);
         primaryStage.show();
