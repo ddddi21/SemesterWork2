@@ -7,6 +7,7 @@
     <groupId>ru.itis</groupId>
     <artifactId>my-work</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -27,6 +28,18 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <mainClass>main.Client</mainClass>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
         </plugins>
     </build>
 
