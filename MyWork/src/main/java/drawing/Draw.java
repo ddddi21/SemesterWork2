@@ -135,7 +135,7 @@ public class Draw  {
             HBox.setHgrow(colorPicker,Priority.ALWAYS);
             vBox.getChildren().addAll(topBox,canvas, scrollPane);
             guessWord =  wordService.randomChoosing();
-            word.setText("Ваше слово: " + guessWord);
+            word.setText("Your word: " + guessWord);
             connection.guessWord = guessWord;
             word.setEditable(false);
             drawingService.sendCorrectAnswerToServer(guessWord);
@@ -159,7 +159,7 @@ public class Draw  {
         vBox.setVgrow(scrollPane, Priority.ALWAYS);
         root.getChildren().add(vBox);
         Scene scene = new Scene(root, 600, 625);
-        primaryStage.setTitle("крокодильчик");
+        primaryStage.setTitle("crocodile");
         primaryStage.setScene(scene);
         primaryStage.show();
 

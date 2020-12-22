@@ -43,7 +43,7 @@ public class Client extends Application implements ConnectionListener {
     public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/lobby.fxml"));
-            connection = new Connection(this, "localhost", 54181);
+            connection = new Connection(this, "25.32.229.34", 54181);
             System.out.println("Test connection: "+ connection);
             System.out.println("Test socket: "+ connection.socket);
 //            txtAreaDisplay.appendText("Connected. \n");
@@ -76,14 +76,14 @@ public class Client extends Application implements ConnectionListener {
                     draw.start(stage);
                     if (connection.isCommander)
                         printMessage("you are drawing!");
-                    else printMessage("ты угадываешь!");
+                    else printMessage("you are guess!");
                     ((Node) (event.getSource())).getScene().getWindow().hide();
                 } catch (Exception e) {
                     onException(connection,e);
                 }
             }
         });
-        primaryStage.setTitle("крокодильчик");
+        primaryStage.setTitle("crocodile");
         primaryStage.setScene(scene);
         primaryStage.show();
 

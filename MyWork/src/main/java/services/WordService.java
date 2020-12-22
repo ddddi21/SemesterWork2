@@ -16,7 +16,7 @@ public class WordService {
     }
 
     public String randomChoosing(){
-        int random = (int) (Math.random() * 21); //всего 11слов в репе (пока)
+        int random = (int) (Math.random() * 15); //всего 11слов в репе (пока)
         String word = allWords.get(random);
         return word;
     }

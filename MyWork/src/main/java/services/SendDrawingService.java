@@ -5,11 +5,9 @@ import javafx.scene.paint.Color;
 import network.Connection;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class SendDrawingService {
@@ -39,8 +37,8 @@ public class SendDrawingService {
         thisSocket = socket;
         System.out.println("DrawService socket: "+ socket);
         try {
-            in = new BufferedReader(new InputStreamReader(thisSocket.getInputStream()));
-            out = new PrintWriter(thisSocket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(thisSocket.getInputStream(), StandardCharsets.UTF_8));
+            out = new PrintWriter(new OutputStreamWriter(thisSocket.getOutputStream(),StandardCharsets.UTF_8), true);
         }catch (IOException e){
             e.printStackTrace();
         }

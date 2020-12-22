@@ -6,28 +6,22 @@ public class WordRepository {
     public static final ArrayList<String > allWords = new ArrayList<>();
 
     static {
-        allWords.add("кот");
-        allWords.add("таракан");
-        allWords.add("альпака");
-        allWords.add("собака");
-        allWords.add("стул");
-        allWords.add("пакет");
-        allWords.add("мыло");
-        allWords.add("карандаш");
-        allWords.add("корова");
-        allWords.add("солнце");
-        allWords.add("погода");
-        allWords.add("кость");
-        allWords.add("одеяло");
-        allWords.add("чебурашка");
-        allWords.add("зеркало");
-        allWords.add("гирлянда");
-        allWords.add("чай");
-        allWords.add("свинья");
-        allWords.add("Семен Владимирович");
-        allWords.add("ручка");
-        allWords.add("ленин");
-        allWords.add("аниме");
-        allWords.add("пицца");
+        allWords.add("cat");
+        allWords.add("dog");
+        allWords.add("window");
+        allWords.add("chair");
+        allWords.add("bed");
+        allWords.add("package");
+        allWords.add("soup");
+        allWords.add("pencil");
+        allWords.add("cow");
+        allWords.add("sun");
+        allWords.add("mirror");
+        allWords.add("tea");
+        allWords.add("pig");
+        allWords.add("pen");
+        allWords.add("lenin");
+        allWords.add("anime");
+        allWords.add("pizza");
     }
 }
